@@ -1,0 +1,60 @@
+<!<!DOCTYPE html>
+    <html lang="fr">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <title>Chiffrement César</title>
+    </head>
+
+    <body x-data="Data()" class="bg-gray-100 min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-md w-96">
+            <h1 class="text-2xl font-bold mb-4">Chiffrement César</h1>
+            <div class="mb-4">
+                <label for="clair" class="block text-sm font-medium text-gray-600">Message à chiffrer</label>
+                <textarea id="clair" x-model="clair" @input="nettoyer"
+                    class="mt-1 p-2 border w-full rounded"></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="nettoy" class="block text-sm font-medium text-gray-600">Message nettoyé</label>
+                <textarea id="nettoy" x-model="nettoy" class="mt-1 p-2 border w-full rounded" readonly></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="decal" class="block text-sm font-medium text-gray-600">Décalage</label>
+                <input id="decal" x-model="decal" type="number" class="mt-1 p-2 border w-full rounded">
+            </div>
+            <div class="mb-4">
+                <label for="code" class="block text-sm font-medium text-gray-600">Message chiffré</label>
+                <textarea id="code" x-model="code" class="mt-1 p-2 border w-full rounded" readonly></textarea>
+            </div>
+            <button id="coder" @click="coder" class="bg-blue-500 text-white py-2 px-4 rounded">Chiffrer</button>
+        </div>
+
+        <script>
+            function Data() {
+                return {
+                    clair: '',
+                    nettoy: '',
+                    decal: '',
+                    code: '',
+                    nettoyer() {
+                        this.nettoy = this.clair.toLowerCase()
+                            .replace(/[àâ]/g, 'a').replace(/[éèê]/g, 'e').replace(/[ô]/g, 'o').replace(/[^a-z]/g, '')
+                            .toUpperCase();
+                        console.log("hello");
+                    },
+                    cesar(c, dec) {
+                        var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                        return alpha[(+dec + alpha.indexOf(c) + 26) % 26];
+                    },
+                    coder() {
+                        this.code = [...this.nettoy].map(c => this.cesar(c, this.decal)).join('');
+                    },
+                };
+            }
+        </script>
+    </body>
+
+    </html>
